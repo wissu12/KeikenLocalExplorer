@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
+            rel="stylesheet"
+    />
+
+    <link th:href="@{/css/swiper-bundle.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <title>Suggest activities by Wissal ELouafy</title>
+    <!-- Ajoutez la clé API Google Maps ici -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGXRYI1JUJYlTTq_jgzO0LwVkpGFc_pN0&callback=initMap" async></script>
+
+</head>
+<body>
+<nav>
+    <div class="nav__bar">
+        <div class="logo">
+            <a href="#"><img th:src="@{/assets/logo.png}" alt="logo" /></a>
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+        </div>
+    </div>
+
+    <div style="display: flex;">
+
+        <a th:href="@{/api/}" >
+            <button class="btn nav__btn">Home</button>
+        </a>
+    </div>
+
+</nav>
+
+<header >
+    <div class="section__container header__container">
+
+        <div class="card__container swiper">
+
+
+
+
+            <div class="card__content" style="margin-top: -60px;margin-left: 100px;">
+                <div class="swiper-wrapper" >
+                    <article class="card__article swiper-slide"  style="width: 1000px;">
+                        <div class="card__image">
+                            <img style="width: 600px;" th:src="@{/assets/bg2.png}"  alt="image" class="card__img">
+                            <div class="card__shadow"></div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name">Discover recommended activities based on the current
+                                time,localisation and   weather conditions: <p id="address" style="display:none;"></p>
+                                <p id="currentDateTime" style="display:none;"></p>
+                                <p id="weatherInfo"></p>  </h3>
+
+                            <div class="card__description" style="color: hsl(212, 4%, 95%);" id="activitySuggestions"></div>
+
+<!--                            <div style="display: flex;align-items: center;margin-left: 380px;">-->
+<!--                                <a style="margin-right: 10px;" href="#" class="card__button">Next</a>-->
+<!--                                <a href="#" class="card__button"> Done</a>-->
+<!--                            </div>-->
+
+                            <div style="display: flex;align-items: center;display: none;" id="activityContainer" >
+                                <button style="margin-right: 10px;" class="card__button" onclick="showNextActivity()">Next</button>
+                                <button class="card__button" onclick="validateActivity()">Done</button>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+            <div id="map" style="height: 600px;margin-top: 50px;width: 980px;margin-left: 100px;display: none;"></div>
+
+
+
+
+        </div>
+    </div>
+</header>
+
+
+
+
+<footer class="footer" id="contact">
+    <div class="section__container footer__container">
+        <div class="footer__col">
+            <div class="logo">
+                <a href="#home"><img th:src="@{/assets/logo.png}"  alt="logo" /></a>
+            </div>
+            <p class="section__description">
+
+                Explore our dynamic site, your personalized activity guide.
+                Discover unique experiences tailored to your preferences. Allow yourself to be inspired to create unforgettable memories.
+            </p>
+            <button class="btn">Start now</button>
+        </div>
+        <div class="footer__col">
+            <h4>Find your activity</h4>
+            <ul class="footer__links">
+                <li><a href="#">Find a picturesque café</a></li>
+                <li><a href="#">Discover hiking trails</a></li>
+                <li><a href="#">Recommend contemporary art museums</a></li>
+                <li><a href="#">Explore local markets</a></li>
+                <li><a href="#">Read a book by the seaside</a></li>
+            </ul>
+        </div>
+
+        <div class="footer__col">
+            <h4>Privacy Policy</h4>
+            <ul class="footer__links">
+                <li><a href="#">Transparency</a></li>
+                <li><a href="#">Data Security</a></li>
+                <li><a href="#">Restricted Sharing</a></li>
+                <li><a href="#">User Rights</a></li>
+            </ul>
+        </div>
+        <div class="footer__col">
+            <h4>CONTACT US</h4>
+            <ul class="footer__links">
+                <li><a href="#">wissalelouafy12@gmail.com</a></li>
+            </ul>
+            <div class="footer__socials">
+                <a href="#"><img th:src="@{/assets/facebook.png}" alt="facebook" /></a>
+                <a href="#"><img th:src="@{/assets/instagram.png}"  alt="instagram" /></a>
+                <a href="#"><img th:src="@{/assets/youtube.png}" alt="youtube" /></a>
+                <a href="#"><img th:src="@{/assets/twitter.png}"    alt="twitter" /></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer__bar">
+        Copyright © 2024 Keiken Test by Wissal El ouafy. All rights reserved.
+    </div>
+</footer>
+
+<script>
+    let currentActivityIndex = 0;
+    let activitySuggestions = [];
+
+    async function getLocation() {
+        try {
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+
+            showPosition(position);
+        } catch (error) {
+            showError(error);
+        }
+    }
+
+    async function showPosition(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`);
+            const data = await response.json();
+            const address = data.display_name;
+
+            const currentDateTime = new Date().toLocaleString();
+
+            const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=7357b3bd6e46de851732daf5a0ade2fe`);
+            const weatherData = await weatherResponse.json();
+
+            const temperatureKelvin = weatherData.main.temp;
+            const temperatureCelsius = temperatureKelvin - 273.15;
+            const description = weatherData.weather[0].description;
+
+            document.getElementById('address').innerText = `Address: ${address}`;
+            document.getElementById('currentDateTime').innerText = `Current Date/Time: ${currentDateTime}`;
+            document.getElementById('weatherInfo').innerText = `Temperature: ${temperatureCelsius.toFixed(2)}°C, Description: ${description}`;
+
+            sendLocationAndWeatherInfo(latitude, longitude, address, currentDateTime, temperatureCelsius, description);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function showError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("An unknown error occurred.");
+                break;
+        }
+    }
+
+    async function sendLocationAndWeatherInfo(latitude, longitude, address, currentDateTime, temperatureCelsius, description) {
+        // Appelez votre nouvelle fonction pour obtenir les activités de GPT-3 ici
+        getActivitiesFromGPT3(address, currentDateTime, temperatureCelsius, description);
+    }
+async function getActivitiesFromGPT3(address, currentDateTime, temperatureCelsius, description) {
+    const apiKey2 = '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';
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey2}`,
+    };
+
+    const requestData = {
+        model: 'gpt-3.5-turbo',
+        messages: [
+           { role: 'user', content: `List activities near the address${address} with ${description} weather
+           on ${currentDateTime} without  introduction and details. Provide activity suggestions with their respective locations in square brackets,
+           with mentioning latitude and longitude, For example, suggest a location for hiking ,go to  coffe or any other activity.
+            also I want the activities and locations to be very close to the address,
+             for example, go to the cafe beautiful view Beni mellal [34.6780,-6.678]. The location must be in square brackets` },
+
+        ],
+    };
+
+    try {
+        const response = await axios.post(apiUrl, requestData, { headers });
+        activitySuggestions = response.data.choices[0].message.content.split('\n').filter(Boolean);
+
+        // Affichez la première suggestion d'activité sur la page HTML
+        showCurrentActivity();
+
+        // Affichez les boutons une fois que les activités sont chargées
+        document.getElementById('activityContainer').style.display = 'block';
+    } catch (error) {
+        console.error('Error generating activities:', error);
+    }
+}
+    async function getActivitiesFromGPT32(address, currentDateTime, temperatureCelsius, description) {
+        const apiKey2 = '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';
+        const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey2}`,
+        };
+
+        const requestData = {
+            model: 'gpt-3.5-turbo',
+            messages: [
+               { role: 'user', content: `List activities near the address${address} with ${description} weather
+               on ${currentDateTime} without  introduction and details. Provide activity suggestions with their respective locations in square brackets,
+               without mentioning latitude and longitude, For example, suggest a location for hiking ,go to  coffe or any other activity.
+                also I want the activities and locations to be very close to the address,
+                 for example, go to the cafe [beautiful view Beni mellal]. The location must be in square brackets` },
+
+            ],
+        };
+
+        try {
+            const response = await axios.post(apiUrl, requestData, { headers });
+            activitySuggestions = response.data.choices[0].message.content.split('\n').filter(Boolean);
+
+            // Affichez la première suggestion d'activité sur la page HTML
+            showCurrentActivity();
+        } catch (error) {
+            console.error('Error generating activities:', error);
+        }
+    }
+
+    function showCurrentActivity() {
+        const activitySuggestionsContainer = document.getElementById('activitySuggestions');
+        activitySuggestionsContainer.innerHTML = `<p>${activitySuggestions[currentActivityIndex]}</p>`;
+    }
+
+    function showNextActivity() {
+        currentActivityIndex = (currentActivityIndex + 1) % activitySuggestions.length;
+        showCurrentActivity();
+    }
+    // ... votre code existant ...
+
+ function validateActivity2() {
+        const activity = activitySuggestions[currentActivityIndex];
+
+        // You can extract the location from the activity (assuming it's in square brackets)
+        const locationMatch = activity.match(/\[(.*?)\]/);
+        const location = locationMatch ? locationMatch[1] : '';
+
+        // Call a function to update the map with the new location
+        updateMapWithLocation(location);
+    }
+    async function validateActivity() {
+    const activity = activitySuggestions[currentActivityIndex];
+
+    // You can extract the location from the activity (assuming it's in square brackets)
+    const locationMatch = activity.match(/\[(.*?)\]/);
+    const location = locationMatch ? locationMatch[1] : '';
+
+    // Call a function to update the map with the new location
+    await updateMapWithLocation(location);
+
+    // Hide the "Next Activity" and "Done" buttons after displaying the map
+    document.getElementById('activityContainer').style.display = 'none';
+}
+
+
+    async function updateMapWithLocation(location) {
+        try {
+            // Extract the latitude and longitude from the location (assuming it's in the format: [latitude, longitude])
+            const [latitude, longitude] = location.split(',').map(coord => parseFloat(coord.trim()));
+
+            // Create a new instance of the map centered on the new location
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: { lat: latitude, lng: longitude },
+            });
+
+            // Add a marker at the new location
+            const marker = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+                title: 'Selected Location',
+            });
+
+            // Show the map container
+            document.getElementById('map').style.display = 'block';
+        } catch (error) {
+            console.error('Error during map update:', error);
+        }
+    }
+
+    getLocation();  // Appeler getLocation lors du charg
+</script>
+
+
+
+
+<!-- Ajoutez cette balise script pour charger la bibliothèque fetch qui est utilisée pour les requêtes HTTP -->
+<script src="https://unpkg.com/whatwg-fetch@3.14.1/dist/fetch.umd.js"></script>
+<script src="https://unpkg.com/scrollreveal"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
+            rel="stylesheet"
+    />
+
+    <link th:href="@{/css/swiper-bundle.min.css}" rel="stylesheet" />
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <title>Suggest activities by Wissal ELouafy</title>
+    <!-- Ajoutez la clé API Google Maps ici -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGXRYI1JUJYlTTq_jgzO0LwVkpGFc_pN0&callback=initMap"></script>
+    <!-- Include Axios from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<nav>
+    <div class="nav__bar">
+        <div class="logo">
+            <a href="#"><img th:src="@{/assets/logo.png}" alt="logo" /></a>
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+        </div>
+    </div>
+
+    <div style="display: flex;">
+
+        <a th:href="@{/api/}" >
+            <button class="btn nav__btn">Home</button>
+        </a>
+    </div>
+
+</nav>
+
+<header >
+    <div class="section__container header__container">
+        <div class="card__container swiper">
+            <div class="card__content" style="margin-top: -60px;margin-left: 100px;">
+                <div class="swiper-wrapper" >
+                    <article class="card__article swiper-slide"  style="width: 1000px;">
+                        <div class="card__image">
+                            <img style="width: 600px;" th:src="@{/assets/bg2.png}"  alt="image" class="card__img">
+                            <div class="card__shadow"></div>
+                        </div>
+
+                        <div class="card__data">
+                            <h3 class="card__name">Suggest me activities to do</h3>
+                            <p class="card__description" style="color: hsl(212, 4%, 95%);">
+                                Passionate about development and design,
+                                I carry out projects at the request of users.
+                            </p>
+
+                            <div style="display: flex;align-items: center;margin-left: 380px;">
+                                <a style="margin-right: 10px;" href="#" class="card__button">Next</a>
+                                <a href="#" class="card__button"> Done</a>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+            <div id="map" style="height: 600px;margin-top: 50px;width: 980px;margin-left: 100px;"></div>
+
+
+
+        </div>
+    </div>
+</header>
+
+
+
+
+<footer class="footer" id="contact">
+    <div class="section__container footer__container">
+        <div class="footer__col">
+            <div class="logo">
+                <a href="#home"><img th:src="@{/assets/logo.png}"  alt="logo" /></a>
+            </div>
+            <p class="section__description">
+
+                Explore our dynamic site, your personalized activity guide.
+                Discover unique experiences tailored to your preferences. Allow yourself to be inspired to create unforgettable memories.
+            </p>
+            <button class="btn">Start now</button>
+        </div>
+        <div class="footer__col">
+            <h4>Find your activity</h4>
+            <ul class="footer__links">
+                <li><a href="#">Find a picturesque café</a></li>
+                <li><a href="#">Discover hiking trails</a></li>
+                <li><a href="#">Recommend contemporary art museums</a></li>
+                <li><a href="#">Explore local markets</a></li>
+                <li><a href="#">Read a book by the seaside</a></li>
+            </ul>
+        </div>
+
+        <div class="footer__col">
+            <h4>Privacy Policy</h4>
+            <ul class="footer__links">
+                <li><a href="#">Transparency</a></li>
+                <li><a href="#">Data Security</a></li>
+                <li><a href="#">Restricted Sharing</a></li>
+                <li><a href="#">User Rights</a></li>
+            </ul>
+        </div>
+        <div class="footer__col">
+            <h4>CONTACT US</h4>
+            <ul class="footer__links">
+                <li><a href="#">wissalelouafy12@gmail.com</a></li>
+            </ul>
+            <div class="footer__socials">
+                <a href="#"><img th:src="@{/assets/facebook.png}" alt="facebook" /></a>
+                <a href="#"><img th:src="@{/assets/instagram.png}"  alt="instagram" /></a>
+                <a href="#"><img th:src="@{/assets/youtube.png}" alt="youtube" /></a>
+                <a href="#"><img th:src="@{/assets/twitter.png}"    alt="twitter" /></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer__bar">
+        Copyright © 2024 Keiken Test by Wissal El ouafy. All rights reserved.
+    </div>
+</footer>
+<!-- Ajoutez ce script après la balise script d'axios -->
+<script>
+    // Fonction d'initialisation de la carte
+    function initMap() {
+        // Coordonnées de Beni Mellal (à titre d'exemple)
+        const beniMellalLocation = { lat: 32.3365, lng: -6.3601 };
+
+        // Créez une nouvelle instance de la carte
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 14, // Ajustez le niveau de zoom selon vos besoins
+            center: beniMellalLocation,
+        });
+
+        // Ajoutez un marqueur à l'emplacement de Beni Mellal
+        const marker = new google.maps.Marker({
+            position: beniMellalLocation,
+            map: map,
+            title: 'Beni Mellal, Morocco',
+        });
+    }
+
+    // ... le reste de votre code JavaScript ...
+</script>
+
+
+<!-- Ajoutez cette balise script pour charger la bibliothèque fetch qui est utilisée pour les requêtes HTTP -->
+<script src="https://unpkg.com/whatwg-fetch@3.14.1/dist/fetch.umd.js"></script>
+<script src="https://unpkg.com/scrollreveal"></script>
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>

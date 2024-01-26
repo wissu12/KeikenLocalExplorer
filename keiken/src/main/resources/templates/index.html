@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
+            rel="stylesheet"
+    />
+    <!-- ... autres balises head ... -->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <title>Suggest activities by Wissal ELouafy</title>
+</head>
+<body>
+<nav>
+    <div class="nav__bar">
+        <div class="logo">
+            <a th:href="@{/api/}" ><img th:src="@{/assets/logo.png}"  alt="logo" /></a>
+        </div>
+        <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+        </div>
+    </div>
+
+    <div style="display: flex;">
+
+        <a th:href="@{/api/get-activity}" style="margin-right: 10px;">
+            <button class="btn nav__btn">Start now</button>
+        </a>
+        <a th:href="@{/api/}" >
+            <button class="btn nav__btn">Home</button>
+        </a>
+
+    </div>
+
+</nav>
+
+<header >
+    <div class="section__container header__container">
+        <div class="header__image">
+            <img th:src="@{/assets/header-1.jpg}" alt="header" />
+            <img th:src="@{/assets/header-2.jpg}" alt="header" />
+        </div>
+        <div class="header__content">
+            <div>
+
+                <h1>The Smiling 😊<br />agent for activities</h1>
+                <p class="section__subtitle">
+                    Explore the world in a new light with Local Explorer
+                    Your personalized activities guide based on real-time weather!
+                </p>
+                <div class="action__btns">
+                    <a th:href="@{/api/get-activity}" >
+                        <button class="btn">Start now</button>
+                    </a>
+
+
+                    <div class="story">
+                        <div class="video__image">
+                            <img th:src="@{/assets/story.jpg}"  alt="story" />
+                            <span><i class="ri-play-fill"></i></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section style="padding-top: -70px;" class="section__container room__container">
+    <p class="section__subheader">Whispers of Wanderlust</p>
+    <h2 class="section__header">Explore & Thrive: Unleashing Adventures</h2>
+    <div class="room__grid">
+        <div class="room__card">
+            <div class="room__card__image">
+                <img  th:src="@{/assets/musum.jpg}"  style="height: 300px;" alt="room" />
+                <div class="room__card__icons">
+                    <span><i class="ri-heart-fill"></i></span>
+                    <span><i class="ri-paint-fill"></i></span>
+                    <span><i class="ri-shield-star-line"></i></span>
+                </div>
+            </div>
+            <div class="room__card__details">
+                <h4>Visit a museum</h4>
+                <p>
+
+                    Indulge in culture amid curated exhibits and history.
+                </p>
+
+                <a th:href="@{/api/get-activity}"  style="margin-top: 10px;">
+                    <button class="btn">Show more</button>
+                </a>
+            </div>
+        </div>
+        <div class="room__card">
+            <div class="room__card__image">
+                <img th:src="@{/assets/surf.jpg}" alt="room"  style="height: 300px;"/>
+                <div class="room__card__icons">
+                    <span><i class="ri-heart-fill"></i></span>
+                    <span><i class="ri-paint-fill"></i></span>
+                    <span><i class="ri-shield-star-line"></i></span>
+                </div>
+            </div>
+            <div class="room__card__details">
+                <h4>Surfing adventure</h4>
+                <p>
+                    Ride the waves and feel the exhilaration of surfing.
+                </p>
+
+                <a th:href="@{/api/get-activity}"  style="margin-top: 10px;">
+                    <button class="btn">Show more</button>
+                </a>
+            </div>
+        </div>
+        <div class="room__card">
+            <div class="room__card__image">
+                <img  th:src="@{/assets/room-3.jpg}"  style="height: 300px;" alt="room" />
+                <div class="room__card__icons">
+                    <span><i class="ri-heart-fill"></i></span>
+                    <span><i class="ri-paint-fill"></i></span>
+                    <span><i class="ri-shield-star-line"></i></span>
+                </div>
+            </div>
+            <div class="room__card__details">
+                <h4>Serenity Suites</h4>
+                <p>
+                    Luxury abode with exquisite amenities and personalized service.
+                </p>
+
+                <a th:href="@{/api/get-activity}"  style="margin-top: 10px;">
+                    <button class="btn">Show more</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section__container room__container">
+
+    <p class="section__subheader">Symphony of Tastes</p>
+    <h2 class="section__header">Culinary excellence, diverse flavors.</h2>
+
+    <div class="destination__grid">
+        <div class="destination__card">
+            <img style="height: 400px;" th:src="@{/assets/cafe.jpg}"  alt="destination" />
+            <div class="destination__details">
+                <p class="destination__title">Drink</p>
+                <p class="destination__subtitle">Your coffee</p>
+            </div>
+        </div>
+        <div class="destination__card">
+            <img style="height: 400px;" th:src="@{/assets/kitechen.jpg}"  alt="destination" />
+            <div class="destination__details">
+                <p class="destination__title">Delicious</p>
+                <p class="destination__subtitle">Food</p>
+            </div>
+        </div>
+        <div class="destination__card">
+            <img style="height: 400px;" th:src="@{/assets/food.jpg}"  alt="destination" />
+            <div class="destination__details">
+                <p class="destination__title">Snacktime </p>
+                <p class="destination__subtitle">Symphony</p>
+            </div>
+        </div>
+        <div class="destination__card">
+            <img style="height: 400px;"th:src="@{/assets/food2.jpg}"  alt="destination" />
+            <div class="destination__details">
+                <p class="destination__title">Pizza</p>
+                <p class="destination__subtitle">Passion</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class=" section__container room__container">
+    <p class="section__subheader">Nature's Staircase</p>
+    <h2 class="section__header">Every Step, a Story; Every Summit, a Triumph.</h2>
+    <div class="section__container gallary__container">
+
+        <div class="image__gallary">
+            <div class="gallary__col">
+                <img th:src="@{/assets/gallery-1.jpg}" alt="gallary" />
+            </div>
+            <div class="gallary__col">
+                <img  th:src="@{/assets/gallery-2.jpg}"  alt="gallary" />
+                <img th:src="@{/assets/gallery-3.jpg}"  alt="gallary" />
+            </div>
+        </div>
+        <div class="gallary__content">
+            <div>
+                <h2 class="section__title">
+                    Our trip gallary that will inspire you
+                </h2>
+                <p class="section__subtitle">
+                    Embark on a visual journey through 'Our Trip Gallery,' a captivating collection of moments that transcend time and place.
+                    Each image is a brushstroke of inspiration, weaving together the vibrant tapestry of our adventures.
+                    From breathtaking landscapes to candid snapshots of shared laughter, our gallery is a testament to the beauty of exploration and the joy found in discovery.
+                </p>
+
+                <a th:href="@{/api/get-activity}" >
+                    <button class="btn">Show more</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer class="footer" id="contact">
+    <div class="section__container footer__container">
+        <div class="footer__col">
+            <div class="logo">
+                <a href="#home"><img th:src="@{/assets/logo.png}"  alt="logo" /></a>
+            </div>
+            <p class="section__description">
+
+                Explore our dynamic site, your personalized activity guide.
+                Discover unique experiences tailored to your preferences. Allow yourself to be inspired to create unforgettable memories.
+            </p>
+            <a th:href="@{/api/get-activity}" >
+                <button class="btn nav__btn">Start now</button>
+            </a>
+        </div>
+        <div class="footer__col">
+            <h4>Find your activity</h4>
+            <ul class="footer__links">
+                <li><a href="#">Find a picturesque café</a></li>
+                <li><a href="#">Discover hiking trails</a></li>
+                <li><a href="#">Recommend contemporary art museums</a></li>
+                <li><a href="#">Explore local markets</a></li>
+                <li><a href="#">Read a book by the seaside</a></li>
+            </ul>
+        </div>
+
+        <div class="footer__col">
+            <h4>Privacy Policy</h4>
+            <ul class="footer__links">
+                <li><a href="#">Transparency</a></li>
+                <li><a href="#">Data Security</a></li>
+                <li><a href="#">Restricted Sharing</a></li>
+                <li><a href="#">User Rights</a></li>
+            </ul>
+        </div>
+        <div class="footer__col">
+            <h4>CONTACT US</h4>
+            <ul class="footer__links">
+                <li><a href="#">wissalelouafy12@gmail.com</a></li>
+            </ul>
+            <div class="footer__socials">
+                <a href="#"><img th:src="@{/assets/facebook.png}" alt="facebook" /></a>
+                <a href="#"><img th:src="@{/assets/instagram.png}"  alt="instagram" /></a>
+                <a href="#"><img th:src="@{/assets/youtube.png}" alt="youtube" /></a>
+                <a href="#"><img th:src="@{/assets/twitter.png}"    alt="twitter" /></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer__bar">
+        Copyright © 2024 Keiken Test by Wissal El ouafy. All rights reserved.
+    </div>
+</footer>
+
+<script src="https://unpkg.com/scrollreveal"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
